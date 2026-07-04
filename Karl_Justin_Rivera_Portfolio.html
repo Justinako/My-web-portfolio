@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karl Justin Rivera — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A1420;
+    --panel: #101B2B;
+    --panel-2: #0D1826;
+    --line: #1E2E42;
+    --amber: #E8A33D;
+    --cyan: #4FD1C5;
+    --text: #EDF2F7;
+    --muted: #7C8FA6;
+    --muted-2: #4E617A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--amber); color: #0A1420; }
+
+  a{ color: inherit; text-decoration: none; }
+
+  .wrap{ max-width: 920px; margin: 0 auto; padding: 0 28px; }
+
+  /* Tab bar nav */
+  .tabbar{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(10,20,32,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .tabbar-inner{
+    max-width: 920px; margin:0 auto; padding: 0 28px;
+    display:flex; align-items:center; gap: 2px;
+    overflow-x:auto;
+  }
+  .tab{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 14px 16px;
+    border-right: 1px solid var(--line);
+    white-space: nowrap;
+    position: relative;
+    transition: color .2s ease;
+  }
+  .tab:hover{ color: var(--text); }
+  .tab .dot{ color: var(--cyan); }
+  .tab.brand{ color: var(--amber); font-weight:600; border-right: 1px solid var(--line); padding-right:18px;}
+
+  /* Hero / terminal */
+  .hero{ padding: 40px 0 30px; }
+  .terminal{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .terminal-head{
+    display:flex; align-items:center; gap:8px;
+    padding: 10px 14px;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .terminal-head span{ width:10px; height:10px; border-radius:50%; display:inline-block; background: #3A4A60; }
+  .terminal-head .title{
+    margin-left: 8px; font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted);
+  }
+  .terminal-body{ padding: 26px 26px 30px; font-family:'IBM Plex Mono', monospace; font-size: 14.5px; }
+  .terminal-body .line{ margin-bottom: 6px; color: var(--muted); }
+  .terminal-body .prompt{ color: var(--cyan); }
+  .terminal-body .out{ color: var(--text); }
+  .caret{
+    display:inline-block; width: 8px; height: 16px; background: var(--amber);
+    vertical-align: -3px; animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    margin-top: 26px;
+    letter-spacing: -0.01em;
+  }
+  h1 .accent{ color: var(--amber); }
+  .role-line{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--cyan);
+    font-size: 15px;
+    margin-top: 12px;
+  }
+  .hero-desc{
+    color: var(--muted);
+    max-width: 560px;
+    margin-top: 16px;
+    font-size: 15.5px;
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap: 18px;
+    margin-top: 24px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--muted-2);
+  }
+  .hero-meta a:hover{ color: var(--amber); }
+
+  .cta-row{ display:flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 11px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+  }
+  .btn.primary{ background: var(--amber); color: #0A1420; font-weight:600; border-color: var(--amber); }
+  .btn.primary:hover{ opacity: .88; }
+  .btn.ghost{ color: var(--text); }
+  .btn.ghost:hover{ border-color: var(--muted-2); }
+
+  /* Section framing — "file" headers */
+  section{ padding: 40px 0; border-top: 1px solid var(--line); }
+  .filehead{
+    display:flex; align-items:baseline; gap: 10px; margin-bottom: 34px;
+  }
+  .filehead .ext{
+    font-family:'IBM Plex Mono', monospace; color: var(--muted-2); font-size: 13px;
+  }
+  .filehead h2{
+    font-family:'Space Grotesk', sans-serif; font-size: 24px; font-weight:600;
+  }
+  .filehead .rule{ flex:1; height:1px; background: var(--line); }
+
+  .lede{ color: var(--muted); max-width: 640px; margin-bottom: 30px; font-size: 15px; }
+
+  /* Project cards */
+  .project{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px 18px;
+    margin-bottom: 16px;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .project:hover{ border-color: var(--muted-2); transform: translateY(-2px); }
+  .project-top{
+    display:flex; justify-content: space-between; align-items:flex-start; gap: 16px; flex-wrap: wrap;
+  }
+  .project h3{
+    font-family:'Space Grotesk', sans-serif; font-size: 19px; font-weight:600;
+  }
+  .project .for{ color: var(--muted-2); font-size: 13px; margin-top: 4px; }
+  .stack{ display:flex; gap: 8px; flex-wrap: wrap; }
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px;
+    color: var(--cyan);
+    border: 1px solid rgba(79,209,197,0.28);
+    background: rgba(79,209,197,0.06);
+    padding: 4px 9px; border-radius: 4px;
+  }
+  .project p.desc{ color: var(--text); margin-top: 16px; font-size: 14.5px; }
+  .project ul{ margin-top: 12px; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .project ul li{ margin-bottom: 6px; }
+  .project ul li::marker{ color: var(--amber); }
+
+  /* Skills */
+  .skills-grid{
+    display:grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+  }
+  @media (max-width: 640px){ .skills-grid{ grid-template-columns: 1fr; } }
+  .skillcard{
+    background: var(--panel); border:1px solid var(--line); border-radius: 8px; padding: 18px 20px;
+  }
+  .skillcard .k{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--muted-2);
+    text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px;
+  }
+  .skillcard .v{ font-size: 14.5px; color: var(--text); }
+
+  /* Availability table */
+  .avail{
+    display:flex; gap: 14px; flex-wrap: wrap;
+  }
+  .avail .card{
+    background: var(--panel); border:1px solid var(--line); border-radius: 8px;
+    padding: 16px 20px; flex: 1; min-width: 220px;
+  }
+  .avail .card .d{ font-family:'IBM Plex Mono', monospace; color: var(--amber); font-size: 12.5px; margin-bottom: 6px;}
+  .avail .card .t{ font-size: 14.5px; }
+
+  footer{
+    padding: 30px 0 40px;
+    color: var(--muted-2);
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    display:flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+
+  @media print{
+    .tabbar{ display:none; }
+    .caret{ animation:none; }
+    .chat-toggle, .chat-panel{ display:none !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .caret{ animation:none; opacity:1; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* Chat widget */
+  .chat-toggle{
+    position: fixed; bottom: 24px; right: 24px; z-index: 100;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: var(--amber);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 22px; cursor:pointer;
+    box-shadow: 0 10px 30px -8px rgba(232,163,61,0.55);
+    transition: transform .18s ease;
+  }
+  .chat-toggle:hover{ transform: scale(1.06); }
+
+  .chat-panel{
+    position: fixed; bottom: 90px; right: 24px; z-index: 100;
+    width: 340px; max-width: calc(100vw - 32px);
+    height: 460px; max-height: calc(100vh - 130px);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display:flex; flex-direction: column;
+    overflow:hidden;
+    box-shadow: 0 24px 60px -16px rgba(0,0,0,0.65);
+    opacity: 0; transform: translateY(12px) scale(.98);
+    pointer-events:none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .chat-panel.open{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; }
+
+  .chat-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 14px; background: var(--panel-2); border-bottom: 1px solid var(--line);
+  }
+  .chat-head-title{
+    font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--text);
+    display:flex; align-items:center; gap:8px;
+  }
+  .chat-dot{ width:8px; height:8px; border-radius:50%; background: var(--cyan); display:inline-block; }
+  .chat-tag{ color: var(--muted-2); }
+  .chat-close{
+    background:none; border:none; color: var(--muted); font-size: 14px; cursor:pointer; padding: 2px 6px;
+  }
+  .chat-close:hover{ color: var(--text); }
+
+  .chat-body{
+    flex:1; overflow-y:auto; padding: 14px; display:flex; flex-direction:column; gap:10px;
+  }
+  .chat-msg{
+    font-size: 13.5px; line-height:1.5; padding: 9px 12px; border-radius: 8px; max-width: 88%;
+  }
+  .chat-msg-bot{
+    background: var(--panel-2); border:1px solid var(--line); color: var(--text); align-self:flex-start;
+  }
+  .chat-msg-user{
+    background: rgba(232,163,61,0.14); border: 1px solid rgba(232,163,61,0.3); color: var(--text);
+    align-self:flex-end;
+  }
+
+  .chat-suggest{
+    display:flex; flex-wrap:wrap; gap:6px; padding: 0 14px 10px;
+  }
+  .chat-chip{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    padding: 5px 9px; border-radius: 5px; cursor:pointer; transition: border-color .15s ease, color .15s ease;
+  }
+  .chat-chip:hover{ border-color: var(--cyan); color: var(--cyan); }
+
+  .chat-form{
+    display:flex; gap:8px; padding: 12px; border-top: 1px solid var(--line);
+  }
+  .chat-input{
+    flex:1; background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
+    color: var(--text); font-family:'IBM Plex Sans', sans-serif; font-size: 13px; padding: 9px 11px;
+    outline: none;
+  }
+  .chat-input:focus{ border-color: var(--muted-2); }
+  .chat-send{
+    font-family:'IBM Plex Mono', monospace; font-size: 12.5px; font-weight:600;
+    background: var(--amber); color:#0A1420; border:none; border-radius:6px; padding: 0 14px; cursor:pointer;
+  }
+  .chat-send:hover{ opacity:.88; }
+
+  @media (max-width: 420px){
+    .chat-panel{ right: 16px; left: 16px; width: auto; bottom: 84px; }
+    .chat-toggle{ right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="tabbar">
+  <div class="tabbar-inner">
+    <div class="tab brand"><span class="dot">●</span> karl.rivera</div>
+    <a class="tab" href="#projects">projects.tsx</a>
+    <a class="tab" href="#skills">skills.json</a>
+    <a class="tab" href="#availability">availability.md</a>
+    <a class="tab" href="#contact">contact.sh</a>
+    <a class="tab" href="https://github.com/Justinako" target="_blank" rel="noopener">github ↗</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="terminal">
+      <div class="terminal-head">
+        <span></span><span></span><span></span>
+        <div class="title">karl@bsit — zsh</div>
+      </div>
+      <div class="terminal-body" id="term"></div>
+    </div>
+
+    <h1>Karl Justin Rivera<br><span class="accent">builds things that work.</span></h1>
+    <div class="role-line">// BSIT Student · Batangas State University – TNEU, Mabini Campus</div>
+    <p class="hero-desc">I build web and mobile apps for real coursework problems — role-based systems, structured data tools, and small utilities that people actually use. Currently open to IT support and data entry work around Batangas.</p>
+
+    <div class="hero-meta">
+      <a href="mailto:churoxstart@gnail.com">churoxstart@gnail.com</a>
+      <span>09694564984</span>
+      <span>Talaga Proper, Mabini, Batangas</span>
+      <a href="https://github.com/Justinako" target="_blank" rel="noopener">github.com/Justinako</a>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn primary" href="#projects">View Projects</a>
+      <a class="btn ghost" href="#contact">Get in Touch</a>
+    </div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="filehead">
+      <span class="ext">01</span>
+      <h2>projects.tsx</h2>
+      <div class="rule"></div>
+    </div>
+    <p class="lede">Three coursework projects, each solving a different kind of problem — a real municipal system, a mobile learning tool, and structured-data parsing.</p>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <h3>Tourism Monitoring System</h3>
+          <div class="for">Built for the Municipal Tourism Office, Bauan, Batangas</div>
+        </div>
+        <div class="stack">
+          <span class="chip">React</span>
+          <span class="chip">TypeScript</span>
+          <span class="chip">Tailwind CSS</span>
+        </div>
+      </div>
+      <p class="desc">A multi-role web system for monitoring local tourism activity, with separate dashboards and permissions for Resort Staff, MTO Staff, and Admin.</p>
+      <ul>
+        <li>Role-based login and access control across three distinct user types</li>
+        <li>Structured dashboards for tracking tourism data relevant to LGU reporting</li>
+        <li>Iteratively debugged real UI issues — modal visibility, sidebar behavior, inline styling</li>
+      </ul>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <h3>ByteBrain</h3>
+          <div class="for">IT & Programming quiz / reviewer app</div>
+        </div>
+        <div class="stack">
+          <span class="chip">Flutter</span>
+          <span class="chip">Firebase</span>
+          <span class="chip">Provider</span>
+        </div>
+      </div>
+      <p class="desc">A mobile reviewer app that helps IT students quiz themselves on programming and CS concepts, built with a fun, approachable aesthetic.</p>
+      <ul>
+        <li>State management handled with Provider across quiz flows and score tracking</li>
+        <li>Firebase backend for storing questions and user progress</li>
+        <li>Designed for casual, repeatable review sessions between classes</li>
+      </ul>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <h3>Tugtog ng Bayan</h3>
+          <div class="for">XML-to-HTML OPM music web app</div>
+        </div>
+        <div class="stack">
+          <span class="chip">HTML</span>
+          <span class="chip">XML</span>
+          <span class="chip">CSS</span>
+        </div>
+      </div>
+      <p class="desc">A Spotify-inspired OPM music browser that parses structured XML song data into a styled, navigable HTML interface — full Tagalog UI, dark blue theme, custom genre icons.</p>
+      <ul>
+        <li>Direct experience parsing and displaying structured data — transferable to data entry work</li>
+        <li>Consistent dark theme and iconography designed from scratch</li>
+        <li>Fully localized interface, built for a Filipino audience</li>
+      </ul>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <h3>Buko Juice ni Rivera</h3>
+          <div class="for">Online food ordering system for a family coconut-drink business</div>
+        </div>
+        <div class="stack">
+          <span class="chip">Web App</span>
+          <span class="chip">Role-based Auth</span>
+        </div>
+      </div>
+      <p class="desc">A full online ordering platform with separate Customer, Staff, and Admin roles — built around a real small business selling buko juice and coconut-based treats.</p>
+      <ul>
+        <li>Customer-facing menu, cart, checkout, and delivery scheduling with multiple payment options (COD, GCash, PayMaya, card)</li>
+        <li>Loyalty points and promo code system to encourage repeat orders</li>
+        <li>Admin dashboard for order management, inventory, sales analytics, and user management</li>
+      </ul>
+      <div class="cta-row" style="margin-top:16px;">
+        <a class="btn ghost" href="https://riverabukojuice.vercel.app/" target="_blank" rel="noopener">Live Site ↗</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <div>
+          <h3>Discover Mabini, Batangas</h3>
+          <div class="for">Tourism landing page for Mabini, Batangas</div>
+        </div>
+        <div class="stack">
+          <span class="chip">Web App</span>
+          <span class="chip">Responsive Design</span>
+        </div>
+      </div>
+      <p class="desc">A tourism promotion site highlighting Mabini's diving spots, hikes, and beach resorts, with a booking inquiry form for visitors planning a trip.</p>
+      <ul>
+        <li>Sectioned single-page layout covering attractions, gallery, and booking</li>
+        <li>Booking form capturing guest details, dates, and party size</li>
+        <li>Ambient design touches (background audio, scroll-based sections) for an immersive feel</li>
+      </ul>
+      <div class="cta-row" style="margin-top:16px;">
+        <a class="btn ghost" href="https://lanpg.vercel.app/" target="_blank" rel="noopener">Live Site ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="filehead">
+      <span class="ext">02</span>
+      <h2>skills.json</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skillcard">
+        <div class="k">Development</div>
+        <div class="v">HTML, XML, CSS, React, Flutter</div>
+      </div>
+      <div class="skillcard">
+        <div class="k">Tools & Platforms</div>
+        <div class="v">Firebase, Git, VS Code</div>
+      </div>
+      <div class="skillcard">
+        <div class="k">Data Handling</div>
+        <div class="v">XML parsing, structured data entry, spreadsheet basics</div>
+      </div>
+      <div class="skillcard">
+        <div class="k">Working Style</div>
+        <div class="v">Fast typing, detail-oriented, quick troubleshooting, comfortable under deadlines</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="availability">
+  <div class="wrap">
+    <div class="filehead">
+      <span class="ext">03</span>
+      <h2>availability.md</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="avail">
+      <div class="card">
+        <div class="d">MON — THU</div>
+        <div class="t">6:00 PM – 11:00 PM</div>
+      </div>
+      <div class="card">
+        <div class="d">FRI — SAT</div>
+        <div class="t">Full day availability</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="filehead">
+      <span class="ext">04</span>
+      <h2>contact.sh</h2>
+      <div class="rule"></div>
+    </div>
+    <p class="lede">Open to IT support, data entry, or dev-adjacent part-time work around Batangas. Reach out any time.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="mailto:churoxstart@gnail.com">Email Me</a>
+      <a class="btn ghost" href="tel:09694564984">Call / Text: 0969 456 4984</a>
+      <a class="btn ghost" href="https://github.com/Justinako" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+    <span>Karl Justin Rivera — Batangas State University, TNEU Mabini Campus</span>
+    <span>Built with React, Flutter & XML in real coursework.</span>
+  </div>
+</footer>
+
+<script>
+  const lines = [
+    { p: 'whoami', o: 'karl_justin_rivera — BSIT student, Batangas State University' },
+    { p: 'cat status.txt', o: 'available for IT support / data entry · Mon–Sat evenings, full days Fri–Sat' },
+    { p: './run_portfolio.sh', o: 'loading projects...' }
+  ];
+  const el = document.getElementById('term');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderStatic(){
+    el.innerHTML = lines.map(l =>
+      `<div class="line"><span class="prompt">$</span> ${l.p}</div><div class="line out">${l.o}</div>`
+    ).join('') + '<span class="caret"></span>';
+  }
+
+  if(reduce){
+    renderStatic();
+  } else {
+    let li = 0;
+    function typeLine(){
+      if(li >= lines.length){ 
+        const c = document.createElement('span'); c.className='caret';
+        el.appendChild(c);
+        return; 
+      }
+      const promptEl = document.createElement('div');
+      promptEl.className = 'line';
+      promptEl.innerHTML = '<span class="prompt">$</span> ';
+      el.appendChild(promptEl);
+      let ci = 0;
+      const text = lines[li].p;
+      const typer = setInterval(() => {
+        promptEl.innerHTML = '<span class="prompt">$</span> ' + text.slice(0, ++ci);
+        if(ci >= text.length){
+          clearInterval(typer);
+          const outEl = document.createElement('div');
+          outEl.className = 'line out';
+          outEl.textContent = lines[li].o;
+          el.appendChild(outEl);
+          li++;
+          setTimeout(typeLine, 260);
+        }
+      }, 28);
+    }
+    typeLine();
+  }
+</script>
+
+<!-- AI FAQ Chat Widget -->
+<div id="chatToggle" class="chat-toggle" role="button" tabindex="0" aria-label="Open assistant chat">
+  <span class="chat-toggle-icon">💬</span>
+</div>
+
+<div id="chatPanel" class="chat-panel" aria-hidden="true">
+  <div class="chat-head">
+    <div class="chat-head-title">
+      <span class="chat-dot"></span> karl-bot <span class="chat-tag">// ask me anything</span>
+    </div>
+    <button id="chatClose" class="chat-close" aria-label="Close chat">✕</button>
+  </div>
+  <div id="chatBody" class="chat-body"></div>
+  <div class="chat-suggest" id="chatSuggest"></div>
+  <form id="chatForm" class="chat-form">
+    <input id="chatInput" class="chat-input" type="text" placeholder="Ask about projects, skills, availability..." autocomplete="off" />
+    <button type="submit" class="chat-send">Send</button>
+  </form>
+</div>
+
+<script>
+(function(){
+  const KB = [
+    {
+      keys: ['project','built','build','portfolio','made','work on','worked on'],
+      reply: "Karl's built 5 projects: a Tourism Monitoring System for Bauan's Municipal Tourism Office (React/TypeScript), ByteBrain — a Flutter/Firebase IT quiz app, Tugtog ng Bayan — an XML-to-HTML OPM music app, Buko Juice ni Rivera — a full online food ordering platform, and Discover Mabini, Batangas — a tourism landing page. Scroll to the projects.tsx section to see all of them ⤴"
+    },
+    {
+      keys: ['tourism','bauan','municipal'],
+      reply: "The Tourism Monitoring System was built for Bauan's Municipal Tourism Office — a role-based web app with separate dashboards for Resort Staff, MTO Staff, and Admin, built with React, TypeScript, and Tailwind CSS."
+    },
+    {
+      keys: ['bytebrain','quiz','reviewer'],
+      reply: "ByteBrain is a Flutter + Firebase mobile app that helps IT students quiz themselves on programming and CS concepts, with state management via Provider."
+    },
+    {
+      keys: ['tugtog','music','opm','xml'],
+      reply: "Tugtog ng Bayan is a Spotify-inspired OPM music app that parses structured XML song data into a styled HTML interface — fully in Tagalog, with a dark blue theme and custom genre icons."
+    },
+    {
+      keys: ['buko','juice','food','order','ecommerce','e-commerce'],
+      reply: "Buko Juice ni Rivera is a full online food ordering platform for a family coconut-drink business — customer ordering, loyalty points, and an admin dashboard for sales and inventory. Check it live: riverabukojuice.vercel.app"
+    },
+    {
+      keys: ['mabini','discover','tourism landing','travel'],
+      reply: "Discover Mabini, Batangas is a tourism landing page showcasing diving spots, hikes, and beach resorts, with a booking inquiry form. Live at lanpg.vercel.app"
+    },
+    {
+      keys: ['skill','tech stack','technology','stack','know','language','framework'],
+      reply: "Karl works with HTML, XML, CSS, React, and Flutter, plus Firebase, Git, and VS Code. He's also comfortable with structured data handling like XML parsing and data entry."
+    },
+    {
+      keys: ['available','availability','schedule','hours','work hour','time'],
+      reply: "Karl is available Monday–Thursday, 6:00 PM–11:00 PM, and full days on Friday and Saturday."
+    },
+    {
+      keys: ['contact','email','phone','number','reach','hire','get in touch'],
+      reply: "You can reach Karl at churoxstart@gnail.com or 0969 456 4984. There's also an Email Me button in the contact.sh section below."
+    },
+    {
+      keys: ['github','repo','code','source'],
+      reply: "Karl's code is on GitHub at github.com/Justinako — there's a link in the top nav and footer."
+    },
+    {
+      keys: ['school','university','study','course','bsit','student'],
+      reply: "Karl is a BSIT student at Batangas State University – TNEU, Mabini Campus, expected to graduate 2026–2027."
+    },
+    {
+      keys: ['location','where','address','live','based'],
+      reply: "Karl is based in Talaga Proper, Mabini, Batangas."
+    },
+    {
+      keys: ['hello','hi','hey','kumusta','kamusta'],
+      reply: "Hey! I'm a quick FAQ bot for Karl's portfolio. Ask me about his projects, skills, availability, or how to reach him."
+    },
+    {
+      keys: ['thank','thanks','salamat'],
+      reply: "You're welcome! Feel free to reach out to Karl directly if you'd like to talk further."
+    }
+  ];
+
+  const FALLBACK = "I'm just a simple FAQ bot, so I might not catch that one — try asking about Karl's projects, skills, availability, or contact info. Or reach him directly at churoxstart@gnail.com.";
+
+  const suggestions = ["What projects has Karl built?", "What's his tech stack?", "When is he available?", "How do I contact him?"];
+
+  const toggle = document.getElementById('chatToggle');
+  const panel = document.getElementById('chatPanel');
+  const closeBtn = document.getElementById('chatClose');
+  const body = document.getElementById('chatBody');
+  const form = document.getElementById('chatForm');
+  const input = document.getElementById('chatInput');
+  const suggestWrap = document.getElementById('chatSuggest');
+
+  function addMsg(text, who){
+    const row = document.createElement('div');
+    row.className = 'chat-msg ' + (who === 'user' ? 'chat-msg-user' : 'chat-msg-bot');
+    row.textContent = text;
+    body.appendChild(row);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function findReply(msg){
+    const m = msg.toLowerCase();
+    for(const entry of KB){
+      if(entry.keys.some(k => m.includes(k))) return entry.reply;
+    }
+    return FALLBACK;
+  }
+
+  function renderSuggestions(){
+    suggestWrap.innerHTML = '';
+    suggestions.forEach(s => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chat-chip';
+      chip.textContent = s;
+      chip.addEventListener('click', () => {
+        addMsg(s, 'user');
+        setTimeout(() => addMsg(findReply(s), 'bot'), 300);
+      });
+      suggestWrap.appendChild(chip);
+    });
+  }
+
+  let opened = false;
+  function openChat(){
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    if(!opened){
+      opened = true;
+      addMsg("Hi! I'm karl-bot 🤖 — ask me anything about Karl's projects, skills, or availability.", 'bot');
+      renderSuggestions();
+    }
+    input.focus();
+  }
+  function closeChat(){
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  toggle.addEventListener('click', () => {
+    panel.classList.contains('open') ? closeChat() : openChat();
+  });
+  toggle.addEventListener('keypress', (e) => { if(e.key === 'Enter') toggle.click(); });
+  closeBtn.addEventListener('click', closeChat);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const val = input.value.trim();
+    if(!val) return;
+    addMsg(val, 'user');
+    input.value = '';
+    setTimeout(() => addMsg(findReply(val), 'bot'), 350);
+  });
+})();
+</script>
+
+</body>
+</html>
