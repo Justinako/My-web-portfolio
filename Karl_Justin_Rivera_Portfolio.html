@@ -33,31 +33,82 @@
 
   .wrap{ max-width: 920px; margin: 0 auto; padding: 0 28px; }
 
-  /* Tab bar nav */
-  .tabbar{
-    position: sticky; top:0; z-index: 50;
-    background: rgba(10,20,32,0.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
+  /* Sidebar nav */
+  body{ padding-left: 220px; }
+  .sidebar{
+    position: fixed; top:0; left:0; bottom:0; width: 220px; z-index: 50;
+    background: var(--panel-2);
+    border-right: 1px solid var(--line);
+    display:flex; flex-direction: column;
+    padding: 26px 0;
+    overflow-y:auto;
   }
-  .tabbar-inner{
-    max-width: 920px; margin:0 auto; padding: 0 28px;
-    display:flex; align-items:center; gap: 2px;
-    overflow-x:auto;
+  .sidebar-brand{
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; color: var(--amber); font-weight:600;
+    padding: 0 22px 22px; border-bottom: 1px solid var(--line); margin-bottom: 14px;
+    display:flex; align-items:center; gap:8px;
   }
+  .sidebar-brand .dot{ color: var(--cyan); }
   .tab{
     font-family:'IBM Plex Mono', monospace;
     font-size: 12.5px;
     color: var(--muted);
-    padding: 14px 16px;
-    border-right: 1px solid var(--line);
+    padding: 11px 22px;
     white-space: nowrap;
     position: relative;
-    transition: color .2s ease;
+    transition: color .2s ease, background .2s ease;
+    border-left: 2px solid transparent;
   }
-  .tab:hover{ color: var(--text); }
-  .tab .dot{ color: var(--cyan); }
-  .tab.brand{ color: var(--amber); font-weight:600; border-right: 1px solid var(--line); padding-right:18px;}
+  .tab:hover{ color: var(--text); background: rgba(255,255,255,0.03); border-left-color: var(--muted-2); }
+  .tab.active{ color: var(--amber); border-left-color: var(--amber); background: rgba(232,163,61,0.06); }
+
+  .sidebar-foot{
+    margin-top: auto; padding: 16px 22px 0; border-top: 1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted-2);
+  }
+
+  .menu-btn{
+    display:none;
+    position: fixed; top: 12px; left: 16px; z-index: 60;
+    width: 38px; height: 38px; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--line);
+    align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .menu-btn span, .menu-btn span::before, .menu-btn span::after{
+    content:''; display:block; width: 16px; height: 2px; background: var(--text); position:relative;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .menu-btn span::before{ position:absolute; top:-5px; }
+  .menu-btn span::after{ position:absolute; top:5px; }
+  .menu-btn.open span{ background: transparent; }
+  .menu-btn.open span::before{ top:0; transform: rotate(45deg); background: var(--amber); }
+  .menu-btn.open span::after{ top:0; transform: rotate(-45deg); background: var(--amber); }
+
+  .sidebar-overlay{
+    display:none;
+    position: fixed; inset:0; background: rgba(0,0,0,0.5); z-index: 55;
+    opacity:0; transition: opacity .2s ease;
+  }
+  .sidebar-overlay.open{ opacity:1; }
+
+  @media (max-width: 760px){
+    body{ padding-left: 0; padding-top: 54px; }
+    .menu-btn{ display:flex; }
+    .sidebar{
+      top:0; left:0; bottom:0; width: 240px; height:auto;
+      flex-direction: column; align-items:stretch; padding: 0;
+      transform: translateX(-100%);
+      transition: transform .22s ease;
+      z-index: 58;
+    }
+    .sidebar.open{ transform: translateX(0); }
+    .sidebar-brand{ border-bottom:1px solid var(--line); border-right:none; padding: 16px 22px; margin-bottom:0; flex-shrink:0; padding-left: 60px; }
+    .tab{ border-left:2px solid transparent; border-bottom:none; padding: 11px 22px; height:auto; display:block; flex-shrink:0; }
+    .tab.active{ border-bottom-color:transparent; border-left-color: var(--amber); }
+    .sidebar-foot{ display:block; }
+    .sidebar-overlay.open{ display:block; }
+  }
 
   /* Hero / terminal */
   .hero{ padding: 40px 0 30px; }
@@ -210,7 +261,8 @@
   }
 
   @media print{
-    .tabbar{ display:none; }
+    .sidebar{ display:none; }
+    body{ padding-left: 0; }
     .caret{ animation:none; }
     .chat-toggle, .chat-panel{ display:none !important; }
   }
@@ -220,17 +272,20 @@
     html{ scroll-behavior:auto; }
   }
 
-  /* Chat widget */
+  /* Chat widget (floating bubble) */
   .chat-toggle{
     position: fixed; bottom: 24px; right: 24px; z-index: 100;
     width: 54px; height: 54px; border-radius: 50%;
     background: var(--amber);
+    color: #0A1420;
     display:flex; align-items:center; justify-content:center;
     font-size: 22px; cursor:pointer;
     box-shadow: 0 10px 30px -8px rgba(232,163,61,0.55);
-    transition: transform .18s ease;
+    transition: transform .18s ease, opacity .18s ease;
   }
   .chat-toggle:hover{ transform: scale(1.06); }
+  .chat-toggle-icon{ width: 24px; height: 24px; display:block; }
+  .chat-toggle span:last-child{ display:none; }
 
   .chat-panel{
     position: fixed; bottom: 90px; right: 24px; z-index: 100;
@@ -250,7 +305,7 @@
 
   .chat-head{
     display:flex; align-items:center; justify-content:space-between;
-    padding: 12px 14px; background: var(--panel-2); border-bottom: 1px solid var(--line);
+    padding: 16px 16px; background: var(--panel-2); border-bottom: 1px solid var(--line);
   }
   .chat-head-title{
     font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--text);
@@ -259,15 +314,15 @@
   .chat-dot{ width:8px; height:8px; border-radius:50%; background: var(--cyan); display:inline-block; }
   .chat-tag{ color: var(--muted-2); }
   .chat-close{
-    background:none; border:none; color: var(--muted); font-size: 14px; cursor:pointer; padding: 2px 6px;
+    background:none; border:none; color: var(--muted); font-size: 16px; cursor:pointer; padding: 2px 6px;
   }
   .chat-close:hover{ color: var(--text); }
 
   .chat-body{
-    flex:1; overflow-y:auto; padding: 14px; display:flex; flex-direction:column; gap:10px;
+    flex:1; overflow-y:auto; padding: 16px; display:flex; flex-direction:column; gap:10px;
   }
   .chat-msg{
-    font-size: 13.5px; line-height:1.5; padding: 9px 12px; border-radius: 8px; max-width: 88%;
+    font-size: 13.5px; line-height:1.5; padding: 9px 12px; border-radius: 8px; max-width: 90%;
   }
   .chat-msg-bot{
     background: var(--panel-2); border:1px solid var(--line); color: var(--text); align-self:flex-start;
@@ -278,7 +333,7 @@
   }
 
   .chat-suggest{
-    display:flex; flex-wrap:wrap; gap:6px; padding: 0 14px 10px;
+    display:flex; flex-wrap:wrap; gap:6px; padding: 0 16px 12px;
   }
   .chat-chip{
     font-family:'IBM Plex Mono', monospace; font-size: 11px;
@@ -288,7 +343,7 @@
   .chat-chip:hover{ border-color: var(--cyan); color: var(--cyan); }
 
   .chat-form{
-    display:flex; gap:8px; padding: 12px; border-top: 1px solid var(--line);
+    display:flex; gap:8px; padding: 14px 16px; border-top: 1px solid var(--line);
   }
   .chat-input{
     flex:1; background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
@@ -310,18 +365,21 @@
 </head>
 <body>
 
-<nav class="tabbar">
-  <div class="tabbar-inner">
-    <div class="tab brand"><span class="dot">●</span> karl.rivera</div>
-    <a class="tab" href="#projects">projects.tsx</a>
-    <a class="tab" href="#skills">skills.json</a>
-    <a class="tab" href="#availability">availability.md</a>
-    <a class="tab" href="#contact">contact.sh</a>
-    <a class="tab" href="https://github.com/Justinako" target="_blank" rel="noopener">github ↗</a>
-  </div>
+<div id="menuBtn" class="menu-btn" role="button" tabindex="0" aria-label="Toggle menu"><span></span></div>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><span class="dot">●</span> karl.rivera</div>
+  <a class="tab active" href="#top">home.tsx</a>
+  <a class="tab" href="#projects">projects.tsx</a>
+  <a class="tab" href="#skills">skills.json</a>
+  <a class="tab" href="#availability">availability.md</a>
+  <a class="tab" href="#contact">contact.sh</a>
+  <a class="tab" href="https://github.com/Justinako" target="_blank" rel="noopener">github ↗</a>
+  <div class="sidebar-foot">BSIT · Batangas State University</div>
 </nav>
 
-<header class="hero">
+<header class="hero" id="top">
   <div class="wrap">
     <div class="terminal">
       <div class="terminal-head">
@@ -401,8 +459,8 @@
     <div class="project">
       <div class="project-top">
         <div>
-          <h3>Tugtog ng Bayan</h3>
-          <div class="for">XML-to-HTML OPM music web app</div>
+          <h3>Justify</h3>
+          <div class="for">App for Flutter Project</div>
         </div>
         <div class="stack">
           <span class="chip">HTML</span>
@@ -585,7 +643,12 @@
 
 <!-- AI FAQ Chat Widget -->
 <div id="chatToggle" class="chat-toggle" role="button" tabindex="0" aria-label="Open assistant chat">
-  <span class="chat-toggle-icon">💬</span>
+  <svg class="chat-toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 4.5C4 3.67157 4.67157 3 5.5 3H18.5C19.3284 3 20 3.67157 20 4.5V15.5C20 16.3284 19.3284 17 18.5 17H8.5L4.5 20.5C4.31 20.66 4 20.52 4 20.27V17V4.5Z" fill="#0A1420" stroke="#0A1420" stroke-width="0.5" stroke-linejoin="round"/>
+    <circle cx="8.2" cy="10" r="1.15" fill="#E8A33D"/>
+    <circle cx="12" cy="10" r="1.15" fill="#E8A33D"/>
+    <circle cx="15.8" cy="10" r="1.15" fill="#E8A33D"/>
+  </svg>
 </div>
 
 <div id="chatPanel" class="chat-panel" aria-hidden="true">
@@ -602,6 +665,31 @@
     <button type="submit" class="chat-send">Send</button>
   </form>
 </div>
+
+<script>
+(function(){
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+
+  function openMenu(){
+    sidebar.classList.add('open');
+    menuBtn.classList.add('open');
+    overlay.classList.add('open');
+  }
+  function closeMenu(){
+    sidebar.classList.remove('open');
+    menuBtn.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  menuBtn.addEventListener('keypress', (e) => { if(e.key === 'Enter') menuBtn.click(); });
+  overlay.addEventListener('click', closeMenu);
+  sidebar.querySelectorAll('.tab').forEach(a => a.addEventListener('click', closeMenu));
+})();
+</script>
 
 <script>
 (function(){
@@ -728,6 +816,21 @@
   });
   toggle.addEventListener('keypress', (e) => { if(e.key === 'Enter') toggle.click(); });
   closeBtn.addEventListener('click', closeChat);
+
+  // Sidebar active-link highlighting
+  const navTabs = document.querySelectorAll('.sidebar .tab[href^="#"]');
+  const sections = Array.from(navTabs).map(t => document.querySelector(t.getAttribute('href'))).filter(Boolean);
+  if('IntersectionObserver' in window && sections.length){
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const id = '#' + entry.target.id;
+          navTabs.forEach(t => t.classList.toggle('active', t.getAttribute('href') === id));
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => obs.observe(s));
+  }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
