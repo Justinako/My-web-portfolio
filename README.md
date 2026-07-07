@@ -5,7 +5,7 @@ A terminal-themed developer portfolio — projects, skills, and an interactive F
 
 A terminal-themed personal portfolio site built to showcase my projects as a BSIT student at Batangas State University – TNEU, Mabini Campus.
 
-🔗 **Live site:** [add your Vercel link here once deployed]
+🔗 **Live site:**[ (https://my-web-portfolio-eight-sigma.vercel.app/) ]
 
 ---
 
